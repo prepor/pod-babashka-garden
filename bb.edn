@@ -3,7 +3,8 @@
         {:git/url "https://github.com/borkdude/gh-release-artifact"
          :sha "a83ee8da47d56a80b6380cbb6b4b9274048067bd"}}
  :tasks {:requires
-         ([babashka.fs :as fs])
+         ([babashka.fs :as fs]
+          borkdude.gh-release-artifact)
          uberjar (clojure "-T:build uber")
          graalvm {:doc "Checks GRAALVM_HOME env var"
                   :task
@@ -26,10 +27,10 @@
                                       "--no-fallback"
                                       "--no-server"
                                       "target/pod-babashka-garden"))}
-         release-artifact {:depends [native-image]
+         release-artifact {;; :depends [native-image]
                            :task (let [[tag] *command-line-args*
                                        opts {:org "prepor"
                                              :repo "pod-babashka-garden"
                                              :tag tag
                                              :file "target/pod-babashka-garden"}]
-                                   (babashka.release-artifact/release opts))}}}
+                                   (borkdude.gh-release-artifact/release-for opts))}}}
