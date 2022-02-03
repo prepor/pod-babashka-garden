@@ -1,7 +1,7 @@
 {:deps {borkdude/gh-release-artifact
         #_{:local/root "../gh-release-artifact"}
         {:git/url "https://github.com/borkdude/gh-release-artifact"
-         :sha "2f8898d84126a4e922c490f8614211a8b0cf67cd"}}
+         :sha "a83ee8da47d56a80b6380cbb6b4b9274048067bd"}}
  :tasks {:requires
          ([babashka.fs :as fs])
          uberjar (clojure "-T:build uber")
@@ -24,5 +24,12 @@
                                       "-jar" "target/standalone.jar"
                                       "--initialize-at-build-time"
                                       "--no-fallback"
-                                      "--no-server"))}
-         release-artifact babashka.release-artifact/release}}
+                                      "--no-server"
+                                      "target/pod-babashka-garden"))}
+         release-artifact {:depends [native-image]
+                           :task (let [[tag] *command-line-args*
+                                       opts {:org "prepor"
+                                             :repo "pod-babashka-garden"
+                                             :tag tag
+                                             :file "target/pod-babashka-garden"}]
+                                   (babashka.release-artifact/release opts))}}}
