@@ -32,5 +32,6 @@
                                        opts {:org "prepor"
                                              :repo "pod-babashka-garden"
                                              :tag tag
-                                             :file "target/pod-babashka-garden"}]
-                                   (borkdude.gh-release-artifact/release-for opts))}}}
+                                             :file "target/pod-babashka-garden"
+                                             :content-type "application/octet-stream"}]
+                                   (borkdude.gh-release-artifact/overwrite-asset opts))}}}
